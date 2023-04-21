@@ -53,7 +53,7 @@ export default function useHotkeys(shortcuts: HotKey<any>[]) {
         return () => {
             document.removeEventListener("keydown", handleKey);
         };
-    }, []);
+    }, [handleKey]);
 
     return key;
 }

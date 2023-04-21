@@ -30,8 +30,10 @@ const Help: FC<HelpProps> = ({ open, onOpenChange, ...props }) => {
                     <li className="list-none">
                         and hold <KeyIcon>Ctrl</KeyIcon> while pressing the
                         number keys
-                        {onetonine.map((n) => (
-                            <KeyIcon className="mx-1">{n}</KeyIcon>
+                        {onetonine.map((n, i) => (
+                            <KeyIcon key={i} className="mx-1">
+                                {n}
+                            </KeyIcon>
                         ))}
                         to delete the corresponding todo
                     </li>

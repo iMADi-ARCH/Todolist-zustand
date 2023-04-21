@@ -25,7 +25,7 @@ const Accord: FC<AccordionProps> = ({ items }) => {
         >
             {items.map((item, i) => {
                 return (
-                    <AccordionItem value={i.toString()}>
+                    <AccordionItem key={i} value={i.toString()}>
                         <AccordionTrigger>{item.trigger}</AccordionTrigger>
                         <AccordionContent>{item.content}</AccordionContent>
                     </AccordionItem>
@@ -35,7 +35,7 @@ const Accord: FC<AccordionProps> = ({ items }) => {
     );
 };
 
-const AccordionItem: ForwardRefExoticComponent<
+export const AccordionItem: ForwardRefExoticComponent<
     Accordion.AccordionItemProps & RefAttributes<HTMLDivElement>
 > = forwardRef(({ children, className, ...props }, forwardedRef) => (
     <Accordion.Item
@@ -50,7 +50,7 @@ const AccordionItem: ForwardRefExoticComponent<
     </Accordion.Item>
 ));
 
-const AccordionTrigger: ForwardRefExoticComponent<
+export const AccordionTrigger: ForwardRefExoticComponent<
     Accordion.AccordionTriggerProps & RefAttributes<HTMLButtonElement>
 > = forwardRef(({ children, className, ...props }, forwardedRef) => (
     <Accordion.Header className="flex">
@@ -71,7 +71,7 @@ const AccordionTrigger: ForwardRefExoticComponent<
     </Accordion.Header>
 ));
 
-const AccordionContent: ForwardRefExoticComponent<
+export const AccordionContent: ForwardRefExoticComponent<
     Accordion.AccordionContentProps & RefAttributes<HTMLDivElement>
 > = forwardRef(({ children, className, ...props }, forwardedRef) => (
     <Accordion.Content
