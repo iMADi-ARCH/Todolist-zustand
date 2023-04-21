@@ -99,6 +99,7 @@ const Todos: FC<TodosProps> = ({}) => {
             <div className="flex flex-col gap-5 fixed bottom-0 right-0 m-10">
                 <Button
                     variant="secondary"
+                    brightness="dim"
                     className="rounded-full aspect-square text-3xl p-3 shadow-lg"
                     onClick={() => {
                         setHelpOpen(true);
