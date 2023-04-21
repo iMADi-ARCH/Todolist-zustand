@@ -15,7 +15,12 @@ const Help: FC<HelpProps> = ({ open, onOpenChange, ...props }) => {
     }
 
     return (
-        <Modal open={open} onOpenChange={onOpenChange} {...props} title="Help">
+        <Modal
+            open={open}
+            onOpenChange={onOpenChange}
+            {...props}
+            title="Keyboard Shortcuts"
+        >
             <div className="py-5 flex flex-col gap-10">
                 <div className="flex flex-col gap-1 leading-5">
                     <h2 className="text-lg font-semibold">
@@ -44,6 +49,12 @@ const Help: FC<HelpProps> = ({ open, onOpenChange, ...props }) => {
                     <p>
                         Press <KeyIcon>J</KeyIcon> to scroll down and
                         <KeyIcon>K</KeyIcon> to scroll up
+                    </p>
+                </div>{" "}
+                <div className="flex flex-col gap-3 leading-5">
+                    <h2 className="text-lg font-semibold">Help</h2>
+                    <p>
+                        To open this menu press <KeyIcon>/</KeyIcon>
                     </p>
                 </div>
             </div>

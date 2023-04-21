@@ -3,7 +3,7 @@ import { useTodosStore } from "@/store";
 import { FC, useEffect, useRef, useState } from "react";
 import Todo from "./Todo";
 import Button from "../ui/Button";
-import { MdAdd } from "react-icons/md";
+import { MdAdd, MdHelp, MdHelpOutline } from "react-icons/md";
 import AddTodoDialog from "./AddTodoDialog";
 import { animated, useTrail, useTransition } from "@react-spring/web";
 import useHotkeys from "./useHotkeys";
@@ -96,14 +96,25 @@ const Todos: FC<TodosProps> = ({}) => {
                 </span>
             ) : null}
 
-            <Button
-                className="fixed bottom-0 right-0 rounded-full aspect-square text-3xl p-3 m-10 shadow-lg"
-                onClick={() => {
-                    setAddTodoOpen(true);
-                }}
-            >
-                <MdAdd />
-            </Button>
+            <div className="flex flex-col gap-5 fixed bottom-0 right-0 m-10">
+                <Button
+                    variant="secondary"
+                    className="rounded-full aspect-square text-3xl p-3 shadow-lg"
+                    onClick={() => {
+                        setHelpOpen(true);
+                    }}
+                >
+                    <MdHelpOutline />
+                </Button>
+                <Button
+                    className="rounded-full aspect-square text-3xl p-3 shadow-lg"
+                    onClick={() => {
+                        setAddTodoOpen(true);
+                    }}
+                >
+                    <MdAdd />
+                </Button>
+            </div>
 
             <AddTodoDialog open={addTodoOpen} onOpenChange={setAddTodoOpen} />
             <Help open={helpOpen} onOpenChange={setHelpOpen} />
