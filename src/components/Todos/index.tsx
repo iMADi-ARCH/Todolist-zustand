@@ -1,30 +1,40 @@
 "use client";
 import { useTodosStore } from "@/store";
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import Todo from "./Todo";
 import Button from "../ui/Button";
 import { MdAdd } from "react-icons/md";
 import AddTodoDialog from "./AddTodoDialog";
 import { animated, useTrail, useTransition } from "@react-spring/web";
-import useShortcuts from "./useShortcuts";
+import useHotkeys from "./useHotkeys";
 import KeyIcon from "../ui/KeyIcon";
+import Help from "../Help";
+import { Todo as ITodo } from "@/lib/types";
 
 interface TodosProps {}
 
 const Todos: FC<TodosProps> = ({}) => {
-    const todos = useTodosStore((state) => state.todos);
+    const [todos, setTodos] = useState<ITodo[]>([]);
+    const _todos = useTodosStore((state) => state.todos);
     const [addTodoOpen, setAddTodoOpen] = useState(false);
+    const [helpOpen, setHelpOpen] = useState(false);
+
+    useEffect(() => {
+        setTodos(_todos);
+    }, [_todos]);
 
     const scrollVertically = (value: number) => {
         window.scrollBy(0, value);
     };
 
-    const key = useShortcuts([
+    const key = useHotkeys([
         { key: "a", dispatch: setAddTodoOpen, value: true },
         { key: "j", dispatch: scrollVertically, value: 100 },
         { key: "k", dispatch: scrollVertically, value: -100 },
+        { key: "/", dispatch: setHelpOpen, value: !helpOpen },
         // { key: "j", dispatch: scrollVertically, value: 500, shiftKey: true },
     ]);
+
     const [springs] = useTrail(
         todos.length,
         {
@@ -52,13 +62,10 @@ const Todos: FC<TodosProps> = ({}) => {
 
     return (
         <div className="h-full w-full max-w-md flex flex-col items-center justify-center gap-5">
-            <h1 className="text-4xl font-black">Your Todos {key}</h1>
+            <h1 className="text-4xl font-black">Your Todos</h1>
 
             {transitions((style, todo, tr, i) => (
                 <div className="flex items-center w-full gap-2">
-                    {/* <span className="border p-2 leading-none rounded-md opacity-20 aspect-square">
-                        {i + 1}
-                    </span> */}
                     <KeyIcon>{i + 1}</KeyIcon>
                     <animated.div
                         className="w-full flex-1"
@@ -99,6 +106,7 @@ const Todos: FC<TodosProps> = ({}) => {
             </Button>
 
             <AddTodoDialog open={addTodoOpen} onOpenChange={setAddTodoOpen} />
+            <Help open={helpOpen} onOpenChange={setHelpOpen} />
         </div>
     );
 };

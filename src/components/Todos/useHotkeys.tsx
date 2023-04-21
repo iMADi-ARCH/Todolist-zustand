@@ -1,3 +1,4 @@
+import { HotKey } from "@/lib/types";
 import {
     Dispatch,
     SetStateAction,
@@ -6,20 +7,11 @@ import {
     useState,
 } from "react";
 
-export interface ShortcutKey<T> {
-    key: KeyboardEvent["key"];
-    dispatch: Dispatch<SetStateAction<T>> | ((value: T) => void);
-    value: T;
-    shiftKey?: KeyboardEvent["shiftKey"];
-    altKey?: KeyboardEvent["altKey"];
-    ctrlKey?: KeyboardEvent["ctrlKey"];
-}
-
-export default function useShortcuts(shortcuts: ShortcutKey<any>[]) {
+export default function useHotkeys(shortcuts: HotKey<any>[]) {
     const [key, setKey] = useState<KeyboardEvent["key"] | null>(null);
 
     const handleShortcut = useCallback(
-        (e: KeyboardEvent, short: ShortcutKey<any>) => {
+        (e: KeyboardEvent, short: HotKey<any>) => {
             if (
                 (short.shiftKey && !e.shiftKey) ||
                 (short.altKey && !e.altKey) ||

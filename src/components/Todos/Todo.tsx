@@ -7,7 +7,7 @@ import Button from "../ui/Button";
 import Modal from "../ui/Modal";
 import CheckBox from "../ui/CheckBox";
 import { animated, useSpring } from "@react-spring/web";
-import useShortcuts from "./useShortcuts";
+import useHotkeys from "./useHotkeys";
 
 interface TodoProps {
     todo: Todo;
@@ -21,7 +21,7 @@ const Todo: FC<TodoProps> = ({ todo, index, ...props }) => {
     const toggleDone = useTodosStore((state) => state.toggleDone);
     const [isOpen, setIsOpen] = useState<boolean>();
 
-    const key = useShortcuts([
+    const key = useHotkeys([
         {
             key: (index + 1).toString(),
             dispatch: toggleDone,

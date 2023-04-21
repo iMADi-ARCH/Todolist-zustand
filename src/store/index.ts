@@ -1,4 +1,4 @@
-import { Todo } from "@/lib/types";
+import { HotKey, Todo } from "@/lib/types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -44,3 +44,21 @@ export const useTodosStore = create<TodosStore>()(
         { name: "todosStore" }
     )
 );
+
+// interface HotkeysStore {
+//     hotkeys: HotKey<any>[];
+//     addHotkey: (hotkey: HotKey<any>) => void;
+// }
+
+// export const useHotkeysStore = create<HotkeysStore>()(
+//     persist(
+//         (set) => ({
+//             hotkeys: [],
+//             addHotkey: (hotkey) =>
+//                 set((state) => {
+//                     return { hotkeys: [...state.hotkeys, hotkey] };
+//                 }),
+//         }),
+//         { name: "hotkeysStore" }
+//     )
+// );
