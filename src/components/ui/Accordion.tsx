@@ -35,7 +35,7 @@ const Accord: FC<AccordionProps> = ({ items }) => {
     );
 };
 
-export const AccordionItem: ForwardRefExoticComponent<
+const AccordionItem: ForwardRefExoticComponent<
     Accordion.AccordionItemProps & RefAttributes<HTMLDivElement>
 > = forwardRef(({ children, className, ...props }, forwardedRef) => (
     <Accordion.Item
@@ -49,8 +49,9 @@ export const AccordionItem: ForwardRefExoticComponent<
         {children}
     </Accordion.Item>
 ));
+AccordionItem.displayName = "AccordionItem";
 
-export const AccordionTrigger: ForwardRefExoticComponent<
+const AccordionTrigger: ForwardRefExoticComponent<
     Accordion.AccordionTriggerProps & RefAttributes<HTMLButtonElement>
 > = forwardRef(({ children, className, ...props }, forwardedRef) => (
     <Accordion.Header className="flex">
@@ -70,8 +71,8 @@ export const AccordionTrigger: ForwardRefExoticComponent<
         </Accordion.Trigger>
     </Accordion.Header>
 ));
-
-export const AccordionContent: ForwardRefExoticComponent<
+AccordionTrigger.displayName = "AccordionTrigger";
+const AccordionContent: ForwardRefExoticComponent<
     Accordion.AccordionContentProps & RefAttributes<HTMLDivElement>
 > = forwardRef(({ children, className, ...props }, forwardedRef) => (
     <Accordion.Content
@@ -85,4 +86,5 @@ export const AccordionContent: ForwardRefExoticComponent<
         <div className="py-[15px] px-5">{children}</div>
     </Accordion.Content>
 ));
+AccordionContent.displayName = "AccordionContent";
 export default Accord;
