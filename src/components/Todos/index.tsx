@@ -32,10 +32,9 @@ const Todos: FC<TodosProps> = ({}) => {
         { key: "j", dispatch: scrollVertically, value: 100 },
         { key: "k", dispatch: scrollVertically, value: -100 },
         { key: "/", dispatch: setHelpOpen, value: !helpOpen },
-        // { key: "j", dispatch: scrollVertically, value: 500, shiftKey: true },
     ]);
 
-    const [springs] = useTrail(
+    const [fadeFromLeft] = useTrail(
         todos.length,
         {
             from: {
@@ -48,6 +47,21 @@ const Todos: FC<TodosProps> = ({}) => {
             },
         },
         [todos]
+    );
+
+    const [fadeFromRight] = useTrail(
+        2,
+        {
+            from: {
+                opacity: 0,
+                x: 100,
+            },
+            to: {
+                opacity: 1,
+                x: 0,
+            },
+        },
+        []
     );
 
     const transitions = useTransition(todos, {
@@ -66,7 +80,9 @@ const Todos: FC<TodosProps> = ({}) => {
 
             {transitions((style, todo, tr, i) => (
                 <div className="flex items-center w-full gap-2">
-                    <KeyIcon>{i + 1}</KeyIcon>
+                    <animated.div style={fadeFromLeft[i]}>
+                        <KeyIcon>{i + 1}</KeyIcon>
+                    </animated.div>
                     <animated.div
                         className="w-full flex-1"
                         style={style}
@@ -96,25 +112,29 @@ const Todos: FC<TodosProps> = ({}) => {
                 </span>
             ) : null}
 
-            <div className="flex flex-col gap-5 fixed bottom-0 right-0 m-10">
-                <Button
-                    variant="secondary"
-                    brightness="dim"
-                    className="rounded-full aspect-square text-3xl p-3 shadow-lg"
-                    onClick={() => {
-                        setHelpOpen(true);
-                    }}
-                >
-                    <MdHelpOutline />
-                </Button>
-                <Button
-                    className="rounded-full aspect-square text-3xl p-3 shadow-lg"
-                    onClick={() => {
-                        setAddTodoOpen(true);
-                    }}
-                >
-                    <MdAdd />
-                </Button>
+            <div className="flex flex-col gap-5 fixed bottom-0 right-0 m-3">
+                <animated.div style={fadeFromRight[0]}>
+                    <Button
+                        variant="secondary"
+                        brightness="dim"
+                        className="rounded-full aspect-square text-3xl p-3 shadow-lg"
+                        onClick={() => {
+                            setHelpOpen(true);
+                        }}
+                    >
+                        <MdHelpOutline />
+                    </Button>
+                </animated.div>
+                <animated.div style={fadeFromRight[1]}>
+                    <Button
+                        className="rounded-full aspect-square text-3xl p-3 shadow-lg"
+                        onClick={() => {
+                            setAddTodoOpen(true);
+                        }}
+                    >
+                        <MdAdd />
+                    </Button>
+                </animated.div>
             </div>
 
             <AddTodoDialog open={addTodoOpen} onOpenChange={setAddTodoOpen} />

@@ -19,19 +19,22 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en" className="scroll-smooth w-full h-full">
+        <html
+            lang="en"
+            className="scroll-smooth w-full h-full overflow-x-clip overflow-y-auto"
+        >
             <body className="relative w-full h-full bg-zinc-50 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-50">
                 {children}
 
                 <Link
-                    href="https://github.com/iMADi-ARCH/Trivia"
+                    href="https://github.com/iMADi-ARCH/Todolist-zustand"
                     target="_blank"
-                    className="fixed top-0 right-0 p-10"
+                    className="fixed top-0 right-0 p-3 animate-overlayShow"
                 >
                     <Button
                         variant="secondary"
                         brightness="dim"
-                        className="text-3xl p-2"
+                        className="text-3xl p-0"
                     >
                         <Image
                             src={"/github-mark-white.svg"}
@@ -43,11 +46,11 @@ export default function RootLayout({
                     </Button>
                 </Link>
                 <Link
-                    className="absolute bottom-0 p-10 text-xs text-zinc-900 dark:text-zinc-50 hover:opacity-100 opacity-50 transition-opacity"
+                    className="fixed bottom-0 p-3 text-xs text-zinc-900 dark:text-zinc-50 hover:opacity-100 opacity-50 transition-opacity"
                     href={"https://github.com/iMADi-ARCH"}
                     target="_blank"
                 >
-                    Made with{" "}
+                    Made with
                     <AiTwotoneHeart className="inline animate-lubDub text-red-500" />
                     <br /> by Aditya Nandan
                 </Link>
