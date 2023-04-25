@@ -10,6 +10,7 @@ import useHotkeys from "./useHotkeys";
 import KeyIcon from "../ui/KeyIcon";
 import Help from "../Help";
 import { Todo as ITodo } from "@/lib/types";
+import { useAuthContext } from "@/app/providers/AuthContextProvider";
 
 interface TodosProps {}
 
@@ -18,6 +19,8 @@ const Todos: FC<TodosProps> = ({}) => {
     const _todos = useTodosStore((state) => state.todos);
     const [addTodoOpen, setAddTodoOpen] = useState(false);
     const [helpOpen, setHelpOpen] = useState(false);
+
+    const { user } = useAuthContext();
 
     useEffect(() => {
         setTodos(_todos);
@@ -76,7 +79,7 @@ const Todos: FC<TodosProps> = ({}) => {
 
     return (
         <div className="h-full w-full max-w-md flex flex-col items-center justify-center gap-5">
-            <h1 className="text-4xl font-black">Your Todos</h1>
+            <h1 className="text-4xl font-black">{user?.email}&rsquo;s Todos</h1>
 
             {transitions((style, todo, tr, i) => (
                 <div className="flex items-center w-full gap-2">

@@ -1,11 +1,5 @@
 import { HotKey } from "@/lib/types";
-import {
-    Dispatch,
-    SetStateAction,
-    useCallback,
-    useEffect,
-    useState,
-} from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function useHotkeys(shortcuts: HotKey<any>[]) {
     const [key, setKey] = useState<KeyboardEvent["key"] | null>(null);
@@ -21,7 +15,7 @@ export default function useHotkeys(shortcuts: HotKey<any>[]) {
                 return;
             }
 
-            if (short.key === e.key) {
+            if (short.key === e.key.toLowerCase()) {
                 e.preventDefault();
                 // All keys in the combination are pressed simultaneously
                 short.dispatch(short.value);
