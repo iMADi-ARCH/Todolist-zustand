@@ -16,11 +16,7 @@ import useHotkeys from "./useHotkeys";
 import KeyIcon from "../ui/KeyIcon";
 import Help from "../Settings/Help";
 import { useAuthContext } from "@/app/providers/AuthContextProvider";
-import {
-    addTodos,
-    getTodos,
-    saveTodosToFirestore,
-} from "@/firebase/firestore/utils";
+import { getTodos } from "@/firebase/firestore/utils";
 import Toast from "../ui/Toast";
 import Settings from "../Settings";
 
@@ -40,7 +36,7 @@ const Todos: FC<TodosProps> = ({}) => {
     useEffect(() => {
         // if (logged in) and (no cache or last sign in was long ago) then fetch
         getTodos(user, todos).then((ts) => setTodos(ts));
-    }, [todos, user, setTodos]);
+    }, []);
 
     const scrollVertically = (value: number) => {
         window.scrollBy(0, value);

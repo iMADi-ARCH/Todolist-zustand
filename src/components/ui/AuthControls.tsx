@@ -46,7 +46,9 @@ const AuthControls: FC<AuthControlsProps> = ({}) => {
                 </>
             ) : (
                 <Button
-                    onClick={() => signOut(getAuth(firebase_app))}
+                    onClick={() => {
+                        signOut(getAuth(firebase_app));
+                    }}
                     variant="secondary"
                 >
                     Sign Out
