@@ -3,28 +3,44 @@ import { useTodosStore } from "@/store";
 import { FC, useEffect, useRef, useState } from "react";
 import Todo from "./Todo";
 import Button from "../ui/Button";
-import { MdAdd, MdHelp, MdHelpOutline } from "react-icons/md";
+import {
+    MdAdd,
+    MdHelp,
+    MdHelpOutline,
+    MdSave,
+    MdSettings,
+} from "react-icons/md";
 import AddTodoDialog from "./AddTodoDialog";
 import { animated, useTrail, useTransition } from "@react-spring/web";
 import useHotkeys from "./useHotkeys";
 import KeyIcon from "../ui/KeyIcon";
-import Help from "../Help";
-import { Todo as ITodo } from "@/lib/types";
+import Help from "../Settings/Help";
 import { useAuthContext } from "@/app/providers/AuthContextProvider";
+import {
+    addTodos,
+    getTodos,
+    saveTodosToFirestore,
+} from "@/firebase/firestore/utils";
+import Toast from "../ui/Toast";
+import Settings from "../Settings";
 
 interface TodosProps {}
 
 const Todos: FC<TodosProps> = ({}) => {
-    const [todos, setTodos] = useState<ITodo[]>([]);
-    const _todos = useTodosStore((state) => state.todos);
+    // const [todos, setTodos] = useState<ITodo[]>([]);
+
+    const todos = useTodosStore((state) => state.todos);
+    const setTodos = useTodosStore((state) => state.setAll);
+
     const [addTodoOpen, setAddTodoOpen] = useState(false);
-    const [helpOpen, setHelpOpen] = useState(false);
+    const [settingsOpen, setSettingsOpen] = useState(false);
 
     const { user } = useAuthContext();
 
     useEffect(() => {
-        setTodos(_todos);
-    }, [_todos]);
+        // if (logged in) and (no cache or last sign in was long ago) then fetch
+        getTodos(user, todos).then((ts) => setTodos(ts));
+    }, [todos]);
 
     const scrollVertically = (value: number) => {
         window.scrollBy(0, value);
@@ -34,7 +50,7 @@ const Todos: FC<TodosProps> = ({}) => {
         { key: "a", dispatch: setAddTodoOpen, value: true },
         { key: "j", dispatch: scrollVertically, value: 100 },
         { key: "k", dispatch: scrollVertically, value: -100 },
-        { key: "/", dispatch: setHelpOpen, value: !helpOpen },
+        { key: "/", dispatch: setSettingsOpen, value: !settingsOpen },
     ]);
 
     const [fadeFromLeft] = useTrail(
@@ -53,7 +69,7 @@ const Todos: FC<TodosProps> = ({}) => {
     );
 
     const [fadeFromRight] = useTrail(
-        2,
+        3,
         {
             from: {
                 opacity: 0,
@@ -79,7 +95,11 @@ const Todos: FC<TodosProps> = ({}) => {
 
     return (
         <div className="h-full w-full max-w-md flex flex-col items-center justify-center gap-5">
-            <h1 className="text-4xl font-black">{user?.email}&rsquo;s Todos</h1>
+            <h1 className="text-4xl font-black capitalize">
+                {user && user.displayName
+                    ? `${user?.displayName}'s Todos`
+                    : `Your Todos`}
+            </h1>
 
             {transitions((style, todo, tr, i) => (
                 <div className="flex items-center w-full gap-2">
@@ -120,12 +140,12 @@ const Todos: FC<TodosProps> = ({}) => {
                     <Button
                         variant="secondary"
                         brightness="dim"
-                        className="rounded-full aspect-square text-3xl p-3 shadow-lg"
+                        className="rounded-full aspect-square text-3xl p-3"
                         onClick={() => {
-                            setHelpOpen(true);
+                            setSettingsOpen(true);
                         }}
                     >
-                        <MdHelpOutline />
+                        <MdSettings />
                     </Button>
                 </animated.div>
                 <animated.div style={fadeFromRight[1]}>
@@ -141,7 +161,12 @@ const Todos: FC<TodosProps> = ({}) => {
             </div>
 
             <AddTodoDialog open={addTodoOpen} onOpenChange={setAddTodoOpen} />
-            <Help open={helpOpen} onOpenChange={setHelpOpen} />
+            <Settings
+                user={user}
+                todos={todos}
+                open={settingsOpen}
+                onOpenChange={setSettingsOpen}
+            />
         </div>
     );
 };

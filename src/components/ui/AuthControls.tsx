@@ -9,6 +9,12 @@ import Field from "./Field";
 import { useAuthContext } from "@/app/providers/AuthContextProvider";
 import { getAuth, signOut } from "firebase/auth";
 import firebase_app from "@/firebase/config";
+import { useTodosStore } from "@/store";
+import {
+    fetchTodos,
+    getTodos,
+    saveTodosToFirestore,
+} from "@/firebase/firestore/utils";
 
 interface AuthControlsProps {}
 
@@ -61,6 +67,7 @@ const SignUpForm = ({
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const router = useRouter();
+    const todos = useTodosStore((state) => state.todos);
 
     const handleForm = async (event: FormEvent) => {
         event.preventDefault();
@@ -71,8 +78,12 @@ const SignUpForm = ({
             return console.log(error);
         }
 
-        // else successfull
         console.log(result);
+
+        // saving already cached todos to firestore
+        if (result) {
+            await saveTodosToFirestore(result.user, todos);
+        }
         setSignUpOpen(false);
         return router.push("/");
     };
@@ -112,6 +123,7 @@ const SignInForm = ({
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const router = useRouter();
+    const setTodos = useTodosStore((state) => state.setAll);
 
     const handleForm = async (event: FormEvent) => {
         event.preventDefault();
@@ -123,8 +135,13 @@ const SignInForm = ({
         }
 
         // else successful
-        console.log(result);
+        console.log(result?.user.uid);
         setSignInOpen(false);
+        if (result) {
+            const todos = await fetchTodos(result.user);
+            setTodos(todos);
+        }
+
         return router.push("/");
     };
     return (

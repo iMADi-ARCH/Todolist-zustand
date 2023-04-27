@@ -4,6 +4,7 @@ import { persist } from "zustand/middleware";
 
 interface TodosStore {
     todos: Todo[];
+    setAll: (todos: Todo[]) => void;
     add: (todo: Exclude<Todo, "index">) => void;
     remove: (index: number) => void;
     edit: (
@@ -18,6 +19,10 @@ export const useTodosStore = create<TodosStore>()(
     persist(
         (set) => ({
             todos: [],
+            setAll: (todos) =>
+                set((state) => {
+                    return { todos };
+                }),
             add: (todo) =>
                 set((state) => {
                     return { todos: [...state.todos, todo] };

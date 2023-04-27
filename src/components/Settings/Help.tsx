@@ -1,8 +1,9 @@
 "use client";
-import { FC } from "react";
-import Modal from "../ui/Modal";
-import { DialogProps } from "@radix-ui/react-dialog";
+import { FC, HTMLAttributes } from "react";
 import KeyIcon from "../ui/KeyIcon";
+import { cn } from "@/lib/utils";
+import { DialogProps } from "@radix-ui/react-dialog";
+import Modal from "../ui/Modal";
 
 interface HelpProps extends DialogProps {}
 
@@ -21,7 +22,7 @@ const Help: FC<HelpProps> = ({ open, onOpenChange, ...props }) => {
             {...props}
             title="Keyboard Shortcuts"
         >
-            <div className="py-5 flex flex-col gap-10">
+            <div className={`py-5 flex flex-col gap-10`}>
                 <div className="flex flex-col gap-1 leading-5">
                     <h2 className="text-lg font-semibold">
                         Add and remove todos
