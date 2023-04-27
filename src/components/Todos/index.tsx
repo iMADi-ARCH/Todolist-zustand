@@ -40,7 +40,7 @@ const Todos: FC<TodosProps> = ({}) => {
     useEffect(() => {
         // if (logged in) and (no cache or last sign in was long ago) then fetch
         getTodos(user, todos).then((ts) => setTodos(ts));
-    }, [todos]);
+    }, [todos, user, setTodos]);
 
     const scrollVertically = (value: number) => {
         window.scrollBy(0, value);
