@@ -60,11 +60,11 @@ export async function getTodos(user: User | null, cachedTodos: Todo[]) {
         let isStale = true;
         if (user.metadata.lastSignInTime) {
             const loginDayGap =
-                new Date().getDate() -
-                new Date(user.metadata.lastSignInTime).getDate();
+                new Date().getTime() -
+                new Date(user.metadata.lastSignInTime).getTime();
             console.log(loginDayGap);
 
-            isStale = loginDayGap > 7;
+            isStale = loginDayGap > 60000;
         }
 
         if (cachedTodos.length === 0 || isStale) {
