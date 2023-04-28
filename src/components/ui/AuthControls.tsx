@@ -15,6 +15,7 @@ import {
     getTodos,
     saveTodosToFirestore,
 } from "@/firebase/firestore/utils";
+import PasswordField from "./PasswordField";
 
 interface AuthControlsProps {}
 
@@ -23,6 +24,7 @@ const AuthControls: FC<AuthControlsProps> = ({}) => {
     const [signInOpen, setSignInOpen] = useState(false);
 
     const { user } = useAuthContext();
+    const todos = useTodosStore((state) => state.todos);
 
     return (
         <>
@@ -48,6 +50,7 @@ const AuthControls: FC<AuthControlsProps> = ({}) => {
                 <Button
                     onClick={() => {
                         signOut(getAuth(firebase_app));
+                        saveTodosToFirestore(user, todos);
                     }}
                     variant="secondary"
                 >
@@ -99,7 +102,14 @@ const SignUpForm = ({
                     type="email"
                     placeholder="abc@example.com"
                 />
-                <Field
+                {/* <Field
+                    onChange={(e) => setPassword(e.currentTarget.value)}
+                    id="password"
+                    labelText="Password"
+                    type="password"
+                    placeholder=""
+                /> */}
+                <PasswordField
                     onChange={(e) => setPassword(e.currentTarget.value)}
                     id="password"
                     labelText="Password"

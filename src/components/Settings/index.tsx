@@ -11,6 +11,7 @@ import Button from "../ui/Button";
 import { MdHelp, MdSave } from "react-icons/md";
 import Help from "./Help";
 import Switch from "../ui/Switch";
+import { useUserSettingsStore } from "@/store/userSettings";
 
 interface SettingsProps extends DialogProps {
     user: User | null;
@@ -20,6 +21,11 @@ interface SettingsProps extends DialogProps {
 const Settings: FC<SettingsProps> = ({ user, todos, ...props }) => {
     const [saveToastOpen, setSaveToastOpen] = useState(false);
     const [helpOpen, setHelpOpen] = useState(false);
+    const setAutoSync = useUserSettingsStore((state) => state.setAutoSync);
+    const autoSync = useUserSettingsStore(
+        (state) => state.userSettings.autosync
+    );
+
     const key = useHotkeys([
         {
             key: "s",
@@ -62,6 +68,8 @@ const Settings: FC<SettingsProps> = ({ user, todos, ...props }) => {
                                         Automatic Sync
                                     </label> */}
                                     <Switch
+                                        defaultChecked={autoSync}
+                                        onCheckedChange={setAutoSync}
                                         labelText="Automatic Sync"
                                         id="autosync"
                                     />

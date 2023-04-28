@@ -20,7 +20,6 @@ const Todo: FC<TodoProps> = ({ todo, index, ...props }) => {
     const remove = useTodosStore((state) => state.remove);
     const toggleDone = useTodosStore((state) => state.toggleDone);
     const [isOpen, setIsOpen] = useState<boolean>();
-
     const key = useHotkeys([
         {
             key: (index + 1).toString(),

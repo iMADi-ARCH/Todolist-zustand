@@ -14,3 +14,7 @@ export interface HotKey<T> {
     altKey?: KeyboardEvent["altKey"];
     ctrlKey?: KeyboardEvent["ctrlKey"];
 }
+
+export interface UserSettings {
+    autosync: boolean;
+}

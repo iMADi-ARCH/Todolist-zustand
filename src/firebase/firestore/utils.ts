@@ -63,8 +63,7 @@ export async function getTodos(user: User | null, cachedTodos: Todo[]) {
                 new Date().getTime() -
                 new Date(user.metadata.lastSignInTime).getTime();
             console.log(loginDayGap);
-
-            isStale = loginDayGap > 60000;
+            isStale = loginDayGap > 5000;
         }
 
         if (cachedTodos.length === 0 || isStale) {

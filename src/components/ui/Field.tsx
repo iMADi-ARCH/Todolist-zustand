@@ -2,7 +2,7 @@ import { ChangeEventHandler, FC, InputHTMLAttributes } from "react";
 import * as Label from "@radix-ui/react-label";
 import { cn } from "@/lib/utils";
 
-interface FieldProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface FieldProps extends InputHTMLAttributes<HTMLInputElement> {
     id: string;
     labelText: string;
     inputText?: string;
@@ -15,6 +15,7 @@ const Field: FC<FieldProps> = ({
     InputElement,
     className,
     onChange,
+    type,
     ...props
 }) => {
     return (
@@ -24,17 +25,20 @@ const Field: FC<FieldProps> = ({
             </Label.Root>
             {InputElement ? (
                 InputElement
-            ) : props.type !== "textarea" ? (
-                <input
-                    className={cn(
-                        "flex-1 w-full outline-none bg-zinc-200 dark:bg-zinc-700 px-5 py-2 rounded-md",
-                        className
-                    )}
-                    id={id}
-                    name={id}
-                    onChange={onChange}
-                    {...props}
-                />
+            ) : type !== "textarea" ? (
+                <>
+                    <input
+                        className={cn(
+                            "flex-1 w-full outline-none bg-zinc-200 dark:bg-zinc-700 px-5 py-2 rounded-md",
+                            className
+                        )}
+                        id={id}
+                        name={id}
+                        onChange={onChange}
+                        type={type}
+                        {...props}
+                    />
+                </>
             ) : (
                 <textarea
                     className={cn(
@@ -54,5 +58,4 @@ const Field: FC<FieldProps> = ({
         </fieldset>
     );
 };
-
 export default Field;

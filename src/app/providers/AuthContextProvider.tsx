@@ -2,6 +2,7 @@
 import React from "react";
 import { onAuthStateChanged, getAuth, User } from "firebase/auth";
 import firebase_app from "@/firebase/config";
+import Spinner from "@/components/ui/Spinner";
 
 const auth = getAuth(firebase_app);
 
@@ -34,7 +35,13 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
     return (
         <AuthContext.Provider value={{ user }}>
-            {loading ? <div>Loading...</div> : children}
+            {loading ? (
+                <div className="w-full h-full flex items-center justify-center">
+                    <Spinner />
+                </div>
+            ) : (
+                children
+            )}
         </AuthContext.Provider>
     );
 };
