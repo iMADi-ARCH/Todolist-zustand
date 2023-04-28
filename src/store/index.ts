@@ -17,38 +17,38 @@ interface TodosStore {
 }
 
 export const useTodosStore = create<TodosStore>()(
-    persist(
-        (set) => ({
-            todos: [],
-            setAll: (todos) =>
-                set((state) => {
-                    return { todos };
-                }),
-            add: (todo) =>
-                set((state) => {
-                    return { todos: [...state.todos, todo] };
-                }),
-            remove: (index) =>
-                set((state) => {
-                    const todos = [...state.todos];
-                    todos.splice(index, 1);
-                    return { todos };
-                }),
-            edit: (index, key, value) =>
-                set((state) => {
-                    const todos = [...state.todos];
-                    todos[index] = { ...todos[index], [key]: value };
-                    return { todos };
-                }),
-            toggleDone: (index) =>
-                set((state) => {
-                    const todos = [...state.todos];
-                    todos[index].done = !todos[index].done;
-                    return { todos };
-                }),
-        }),
-        { name: "todosStore" }
-    )
+    // persist(
+    (set) => ({
+        todos: [],
+        setAll: (todos) =>
+            set((state) => {
+                return { todos };
+            }),
+        add: (todo) =>
+            set((state) => {
+                return { todos: [...state.todos, todo] };
+            }),
+        remove: (index) =>
+            set((state) => {
+                const todos = [...state.todos];
+                todos.splice(index, 1);
+                return { todos };
+            }),
+        edit: (index, key, value) =>
+            set((state) => {
+                const todos = [...state.todos];
+                todos[index] = { ...todos[index], [key]: value };
+                return { todos };
+            }),
+        toggleDone: (index) =>
+            set((state) => {
+                const todos = [...state.todos];
+                todos[index].done = !todos[index].done;
+                return { todos };
+            }),
+    })
+    // { name: "todosStore" }
+    // )
 );
 
 // interface HotkeysStore {

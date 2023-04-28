@@ -9,6 +9,7 @@ import {
     Controller,
     SpringRef,
     animated,
+    useIsomorphicLayoutEffect,
     useSpringRef,
     useTrail,
     useTransition,
@@ -25,10 +26,10 @@ interface TodosProps {}
 const Todos: FC<TodosProps> = ({}) => {
     // const [todos, setTodos] = useState<ITodo[]>([]);
 
-    // const todos = useTodosStore((state) => state.todos);
-    const storedTodos = [...useTodosStore((state) => state.todos)];
-    // const setTodos = useTodosStore((state) => state.setAll);
-    const [todos, setTodos] = useState<Todo[]>([]);
+    const todos = useTodosStore((state) => state.todos);
+    // const storedTodos = [...useTodosStore((state) => state.todos)];
+    const setTodos = useTodosStore((state) => state.setAll);
+    // const [todos, setTodos] = useState<Todo[]>([]);
     const [isSyncing, setIsSyncing] = useState(false);
     const [syncMessage, setSyncMessage] = useState("Syncing...");
 
@@ -41,14 +42,14 @@ const Todos: FC<TodosProps> = ({}) => {
         console.log(user?.uid);
 
         setIsSyncing(true);
-        const tods = await getTodos(user, storedTodos);
+        const tods = await getTodos(user, todos);
         setTodos(tods);
         setTimeout(() => {
             setSyncMessage(
                 "This is taking longer than usual. Check your internet connection"
             );
         }, 10000);
-        await saveTodosToFirestore(user, storedTodos);
+        // await saveTodosToFirestore(user, storedTodos);
         setIsSyncing(false);
     };
 
@@ -56,9 +57,9 @@ const Todos: FC<TodosProps> = ({}) => {
         setSyncMessage("Syncing...");
     }, [isSyncing]);
 
-    useEffect(() => {
-        setTodos(storedTodos);
-    }, [storedTodos]);
+    // useEffect(() => {
+    //     setTodos(storedTodos);
+    // }, [storedTodos]);
 
     useEffect(() => {
         syncTodos();
@@ -82,7 +83,7 @@ const Todos: FC<TodosProps> = ({}) => {
         { key: "j", dispatch: scrollVertically, value: 100 },
         { key: "k", dispatch: scrollVertically, value: -100 },
         { key: "/", dispatch: setSettingsOpen, value: !settingsOpen },
-        { key: "s", dispatch: syncTodos },
+        { key: "r", dispatch: syncTodos },
     ]);
 
     const [fadeFromLeft] = useTrail(
@@ -119,9 +120,9 @@ const Todos: FC<TodosProps> = ({}) => {
         from: { opacity: 0, x: -100 },
         enter: { opacity: 1, x: 0 },
         leave: { opacity: 0, x: 100 },
-        trail: 50,
+        trail: 0,
         // ref: transitionRef,
-        // exitBeforeEnter: true,
+        // keys: [{}],
         config: {
             bounce: 10,
         },
@@ -142,7 +143,10 @@ const Todos: FC<TodosProps> = ({}) => {
                 </div>
             ) : (
                 transitions((style, todo, tr, i) => (
-                    <div className="flex items-center w-full gap-2">
+                    <animated.div
+                        key={i}
+                        className="flex items-center w-full gap-2"
+                    >
                         <animated.div style={fadeFromLeft[i]}>
                             <KeyIcon>{i + 1}</KeyIcon>
                         </animated.div>
@@ -154,7 +158,7 @@ const Todos: FC<TodosProps> = ({}) => {
                             <Todo index={i} key={i} todo={todo} />
                             {/* {tr.phase} */}
                         </animated.div>
-                    </div>
+                    </animated.div>
                 ))
             )}
 
@@ -171,7 +175,7 @@ const Todos: FC<TodosProps> = ({}) => {
                 );
             })} */}
 
-            {todos.length <= 0 ? (
+            {todos.length <= 0 && !isSyncing ? (
                 <span className="text-xs opacity-50">
                     Press A to add a todo
                 </span>

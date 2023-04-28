@@ -53,20 +53,20 @@ export async function fetchTodos(user: User) {
     return todos;
 }
 
-export async function getTodos(user: User | null, cachedTodos: Todo[]) {
-    let todos: Todo[] = cachedTodos;
+export async function getTodos(user: User | null, cachedTodos?: Todo[]) {
+    let todos: Todo[] = cachedTodos || [];
     // const cachedTodos = useTodosStore((state) => state.todos);
     if (user) {
         let isStale = true;
         if (user.metadata.lastSignInTime) {
-            const loginDayGap =
+            const loginTimeGap =
                 new Date().getTime() -
                 new Date(user.metadata.lastSignInTime).getTime();
-            console.log(loginDayGap);
-            isStale = loginDayGap > 5000;
+            console.log(loginTimeGap);
+            isStale = loginTimeGap > 5000;
         }
 
-        if (cachedTodos.length === 0 || isStale) {
+        if ((cachedTodos && cachedTodos.length === 0) || isStale) {
             todos = await fetchTodos(user);
         }
     }
