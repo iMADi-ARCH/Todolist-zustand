@@ -152,7 +152,7 @@ const Todos: FC<TodosProps> = ({}) => {
                             key={i}
                         >
                             <Todo index={i} key={i} todo={todo} />
-                            {tr.phase}
+                            {/* {tr.phase} */}
                         </animated.div>
                     </div>
                 ))
