@@ -18,6 +18,7 @@ import KeyIcon from "../ui/KeyIcon";
 import { useAuthContext } from "@/app/providers/AuthContextProvider";
 import { getTodos, saveTodosToFirestore } from "@/firebase/firestore/utils";
 import Settings from "../Settings";
+import Spinner from "../ui/Spinner";
 
 interface TodosProps {}
 
@@ -42,9 +43,18 @@ const Todos: FC<TodosProps> = ({}) => {
         setIsSyncing(true);
         const tods = await getTodos(user, storedTodos);
         setTodos(tods);
+        setTimeout(() => {
+            setSyncMessage(
+                "This is taking longer than usual. Check your internet connection"
+            );
+        }, 10000);
         await saveTodosToFirestore(user, storedTodos);
         setIsSyncing(false);
     };
+
+    useEffect(() => {
+        setSyncMessage("Syncing...");
+    }, [isSyncing]);
 
     useEffect(() => {
         setTodos(storedTodos);
@@ -125,20 +135,28 @@ const Todos: FC<TodosProps> = ({}) => {
                     : `Your Todos`}
             </h1>
 
-            {transitions((style, todo, tr, i) => (
-                <div className="flex items-center w-full gap-2">
-                    {/* <animated.div style={fadeFromLeft[i]}>
-                        <KeyIcon>{i + 1}</KeyIcon>
-                    </animated.div> */}
-                    <animated.div
-                        className="w-full flex-1"
-                        style={style}
-                        key={i}
-                    >
-                        <Todo index={i} key={i} todo={todo} />
-                    </animated.div>
+            {isSyncing && user ? (
+                <div className="flex flex-col items-center justify-center p-5 gap-3 text-center">
+                    <h3>{syncMessage}</h3>
+                    <MdSync className="animate-spin -scale-100" />
                 </div>
-            ))}
+            ) : (
+                transitions((style, todo, tr, i) => (
+                    <div className="flex items-center w-full gap-2">
+                        <animated.div style={fadeFromLeft[i]}>
+                            <KeyIcon>{i + 1}</KeyIcon>
+                        </animated.div>
+                        <animated.div
+                            className="w-full flex-1"
+                            style={style}
+                            key={i}
+                        >
+                            <Todo index={i} key={i} todo={todo} />
+                            {tr.phase}
+                        </animated.div>
+                    </div>
+                ))
+            )}
 
             {/* {springs.map((style, i) => {
                 const todo = todos[i];
@@ -183,12 +201,6 @@ const Todos: FC<TodosProps> = ({}) => {
                     </Button>
                 </animated.div>
             </div>
-            {isSyncing && user ? (
-                <div className="absolute left-0 right-0 bottom-5 flex items-center justify-center px-10 gap-3">
-                    <h3>{syncMessage}</h3>
-                    <MdSync className="animate-spin -scale-100" />
-                </div>
-            ) : null}
 
             <AddTodoDialog open={addTodoOpen} onOpenChange={setAddTodoOpen} />
             <Settings
