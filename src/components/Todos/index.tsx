@@ -5,13 +5,19 @@ import Todo from "./Todo";
 import Button from "../ui/Button";
 import { MdAdd, MdSettings, MdSync } from "react-icons/md";
 import AddTodoDialog from "./AddTodoDialog";
-import { animated, useTrail, useTransition } from "@react-spring/web";
+import {
+    Controller,
+    SpringRef,
+    animated,
+    useSpringRef,
+    useTrail,
+    useTransition,
+} from "@react-spring/web";
 import useHotkeys from "./useHotkeys";
 import KeyIcon from "../ui/KeyIcon";
 import { useAuthContext } from "@/app/providers/AuthContextProvider";
 import { getTodos, saveTodosToFirestore } from "@/firebase/firestore/utils";
 import Settings from "../Settings";
-import { useUserSettingsStore } from "@/store/userSettings";
 
 interface TodosProps {}
 
@@ -24,7 +30,6 @@ const Todos: FC<TodosProps> = ({}) => {
     const [todos, setTodos] = useState<Todo[]>([]);
     const [isSyncing, setIsSyncing] = useState(false);
     const [syncMessage, setSyncMessage] = useState("Syncing...");
-    const userSettings = useUserSettingsStore((state) => state.userSettings);
 
     const [addTodoOpen, setAddTodoOpen] = useState(false);
     const [settingsOpen, setSettingsOpen] = useState(false);
@@ -32,16 +37,13 @@ const Todos: FC<TodosProps> = ({}) => {
     const { user } = useAuthContext();
 
     const syncTodos = async () => {
+        console.log(user?.uid);
+
         setIsSyncing(true);
         const tods = await getTodos(user, storedTodos);
-        await saveTodosToFirestore(user, tods);
-        setTimeout(() => {
-            setSyncMessage(
-                "This is taking longer than usual, try reloading the page..."
-            );
-        }, 1000);
-        setIsSyncing(false);
         setTodos(tods);
+        await saveTodosToFirestore(user, storedTodos);
+        setIsSyncing(false);
     };
 
     useEffect(() => {
@@ -70,7 +72,7 @@ const Todos: FC<TodosProps> = ({}) => {
         { key: "j", dispatch: scrollVertically, value: 100 },
         { key: "k", dispatch: scrollVertically, value: -100 },
         { key: "/", dispatch: setSettingsOpen, value: !settingsOpen },
-        { key: "r", dispatch: syncTodos },
+        { key: "s", dispatch: syncTodos },
     ]);
 
     const [fadeFromLeft] = useTrail(
@@ -108,6 +110,8 @@ const Todos: FC<TodosProps> = ({}) => {
         enter: { opacity: 1, x: 0 },
         leave: { opacity: 0, x: 100 },
         trail: 50,
+        // ref: transitionRef,
+        // exitBeforeEnter: true,
         config: {
             bounce: 10,
         },
@@ -123,9 +127,9 @@ const Todos: FC<TodosProps> = ({}) => {
 
             {transitions((style, todo, tr, i) => (
                 <div className="flex items-center w-full gap-2">
-                    <animated.div style={fadeFromLeft[i]}>
+                    {/* <animated.div style={fadeFromLeft[i]}>
                         <KeyIcon>{i + 1}</KeyIcon>
-                    </animated.div>
+                    </animated.div> */}
                     <animated.div
                         className="w-full flex-1"
                         style={style}
